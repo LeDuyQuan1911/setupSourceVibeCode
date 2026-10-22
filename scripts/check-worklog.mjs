@@ -18,7 +18,7 @@ async function check(path) {
   if (!/^\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*\.md$/.test(name)) {
     throw new Error(`Tên file không hợp lệ: ${name}`);
   }
-  const content = await readFile(join(worklogDir, name), "utf8");
+  const content = (await readFile(join(worklogDir, name), "utf8")).replace(/\r\n?/g, "\n");
   const date = name.slice(0, 10);
   if (!content.includes(`- Ngày: ${date}`)) throw new Error(`${name}: thiếu ngày khớp tên file`);
   if (!/^- Agent: .+$/m.test(content)) throw new Error(`${name}: thiếu agent`);
