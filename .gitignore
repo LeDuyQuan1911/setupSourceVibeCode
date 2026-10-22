@@ -11,6 +11,8 @@ dist/
 build/
 coverage/
 .cache/
+.ua/
+.understand-anything/
 .venv/
 __pycache__/
 *.py[cod]

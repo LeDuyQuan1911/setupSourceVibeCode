@@ -10,10 +10,12 @@
 - [x] Bắt buộc ghi worklog riêng cho từng nhiệm vụ của mọi agent.
 - [x] Áp dụng ruleset GitHub chỉ cho chủ repo merge PR vào `main`.
 - [x] Bật plugin review độc lập và tạo mẫu yêu cầu/báo cáo review.
+- [x] Đưa source Understand Anything vào repo và tạo lệnh đánh dấu/kiểm tra graph.
 
 ## Tiếp theo
 
 - [ ] Nhận câu trả lời cho 5 câu hỏi trong `SPEC.md`.
+- [ ] Build runtime vendored và bật Git hook cục bộ khi quyền cho phép; kiểm tra một commit thực tế.
 - [ ] Chọn plugin cần bật cho dự án thực tế.
 - [ ] Chốt phạm vi bản đầu, stack và tiêu chí hoàn thành.
 - [ ] Thiết kế cấu trúc source theo nhu cầu thực tế; cập nhật `MAP.md`.

@@ -13,6 +13,7 @@ Trạng thái: **cần người dùng điền**. Chưa có đủ thông tin đ�
 ## Yêu cầu đã xác nhận
 
 - Repo phải có ngữ cảnh và quy tắc để coding agent đọc trước khi vibe code.
+- Source Understand Anything nằm trong repo và dùng chung cho các agent; commit có thay đổi đánh dấu graph cũ, agent làm mới graph khi cần dùng.
 - Chưa có sản phẩm, stack hoặc tính năng cụ thể được xác nhận.
 
 Khi nhận câu trả lời, thay phần câu hỏi bằng yêu cầu cụ thể, tiêu chí chấp nhận và những gì nằm ngoài phạm vi bản đầu tiên. Không lưu secrets tại đây.

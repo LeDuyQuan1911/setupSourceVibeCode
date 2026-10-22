@@ -23,10 +23,12 @@ Sau khi đổi cấu hình, bắt đầu phiên agent mới hoặc yêu cầu ag
 | `documentation` | Duy trì tài liệu chạy, sử dụng và kiến trúc thực tế |
 | `security` | Thực hiện kiểm tra bảo mật theo rủi ro của sản phẩm |
 | `independent-review` | Agent khác review thay đổi code độc lập trước khi chủ repo quyết định merge |
+| `codebase-graph` | Dùng source Understand Anything trong repo để tạo và làm mới graph khi cần |
 
 Quy tắc bảo vệ secrets cơ bản trong `AGENTS.md` luôn áp dụng, kể cả khi `security` tắt.
 Nhật ký công việc trong `docs/worklog/` cũng luôn bắt buộc; plugin `documentation` dành cho tài liệu sử dụng và kiến trúc sản phẩm.
 Repo này đang bật `independent-review`. Xem [quy trình và mẫu review](../reviews/README.md).
+`codebase-graph` cũng được bật; xem [cách dùng source vendored và trạng thái graph](../docs/understand-anything.md).
 
 ## Tạo plugin mới
 
