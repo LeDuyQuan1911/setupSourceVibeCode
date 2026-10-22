@@ -24,6 +24,8 @@ node scripts/plugins.mjs check
 
 Plugin `independent-review` hiện được bật: agent khác review code trong phiên riêng theo [quy trình và mẫu báo cáo](reviews/README.md) trước khi chủ repo quyết định merge.
 
+Understand Anything được lưu tại `vendor/understand-anything/` và dùng qua plugin `codebase-graph`. Xem [cách build runtime và làm mới graph khi cần](docs/understand-anything.md). Hook sau commit chỉ đánh dấu graph cũ; agent cập nhật graph trước lần dùng tiếp theo.
+
 ## Các file chính
 
 - `AGENTS.md`: quy tắc chung cho coding agent, được Codex sử dụng.
@@ -36,6 +38,7 @@ Plugin `independent-review` hiện được bật: agent khác review code trong
 - `docs/worklog/`: nhật ký bắt buộc cho từng nhiệm vụ của mỗi agent.
 - `governance/`: quy tắc GitHub để chỉ chủ repo merge vào `main`.
 - `reviews/`: yêu cầu và báo cáo review code độc lập.
+- `vendor/understand-anything/`: source Understand Anything đã cố định phiên bản.
 - `contexte/`: quyết định và kiến thức dự án.
 - `livrables/`: sản phẩm đầu ra không phải source code.
 

@@ -14,6 +14,12 @@ Trạng thái: khung làm việc cho agent; chưa có source ứng dụng.
 | `plugins/<id>/plugin.json` | Tên và mô tả của từng plugin |
 | `plugins/<id>/INSTRUCTIONS.md` | Quy trình chỉ áp dụng khi plugin được bật |
 | `scripts/plugins.mjs` | Lệnh liệt kê, bật/tắt và kiểm tra plugin |
+| `vendor/understand-anything/understand-anything-plugin/` | Source skill, dashboard và core của Understand Anything |
+| `docs/understand-anything.md` | Cách build runtime và cập nhật graph khi cần |
+| `scripts/setup-understand-anything.ps1` | Build runtime và bật hook cục bộ trên Windows |
+| `.githooks/post-commit` | Đánh dấu graph cũ sau commit có thay đổi |
+| `scripts/mark-graph-stale.mjs` | Ghi dấu stale theo commit và file đã đổi |
+| `scripts/graph-status.mjs` | Kiểm tra graph khớp commit hiện tại hay chưa |
 | `docs/worklog/README.md` | Quy ước ghi nhật ký bắt buộc |
 | `docs/worklog/<date>-<agent>-<task>.md` | Kết quả và kiểm chứng của từng nhiệm vụ |
 | `scripts/check-worklog.mjs` | Kiểm tra cấu trúc và độ hoàn tất của worklog |

@@ -1,4 +1,4 @@
 {
   "schemaVersion": 1,
-  "enabled": ["independent-review"]
+  "enabled": ["codebase-graph", "independent-review"]
 }

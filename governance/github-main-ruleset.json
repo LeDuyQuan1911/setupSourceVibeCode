@@ -1,14 +1,8 @@
 {
-  "name": "Only LeDuyQuan1911 merges main",
+  "name": "Require PR and protect main",
   "target": "branch",
   "enforcement": "active",
-  "bypass_actors": [
-    {
-      "actor_id": 117301665,
-      "actor_type": "User",
-      "bypass_mode": "pull_request"
-    }
-  ],
+  "bypass_actors": [],
   "conditions": {
     "ref_name": {
       "include": ["refs/heads/main"],
@@ -16,12 +10,6 @@
     }
   },
   "rules": [
-    {
-      "type": "update",
-      "parameters": {
-        "update_allows_fetch_and_merge": false
-      }
-    },
     {
       "type": "deletion"
     },
