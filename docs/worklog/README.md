@@ -1,6 +1,6 @@
 # Nhật ký công việc
 
-Mỗi yêu cầu liên quan đến repo cần một file riêng tại đây, kể cả nhiệm vụ chỉ khảo sát hoặc review. Tạo file khi bắt đầu, bổ sung kết quả trước khi bàn giao. Quy tắc này luôn có hiệu lực, không phụ thuộc plugin `documentation`.
+Mỗi yêu cầu liên quan đến repo cần một file riêng tại đây, kể cả nhiệm vụ chỉ khảo sát hoặc review. Tạo file khi bắt đầu, bổ sung kết quả trước khi bàn giao.
 
 Tên file: `YYYY-MM-DD-<agent>-<task>.md`. Dùng tên nhiệm vụ ngắn, chữ thường, dấu gạch ngang. Nếu trùng tên, thêm số hoặc mã nhiệm vụ. Mỗi agent chỉ sửa log của nhiệm vụ mình trong worktree riêng.
 

@@ -1,30 +1,27 @@
 # setupSourceVibeCode
 
-Khung khởi đầu để làm việc với coding agent. Repo hiện **chưa có ứng dụng hay stack kỹ thuật**; hãy điền [SPEC.md](SPEC.md) trước khi yêu cầu agent tạo code.
+Source chính thức của nền tảng chợ B2B iPhone secondhand, website shop và quản lý CTV/đơn hàng. Ứng dụng đang được xây theo từng luồng nghiệp vụ; hiện đã có đăng ký shop, đăng nhập và admin xét duyệt. Đọc [SPEC.md](SPEC.md) và [luồng nghiệp vụ](docs/2_requirements.md) để biết phạm vi sản phẩm.
+
+**Ưu tiên hiện tại:** hoàn thiện và duyệt [bộ tài liệu chi tiết trước triển khai](docs/1_README.md), chốt các quyết định mở trước khi xây thêm module. Phạm vi bản chính thức được đặc tả tại [docs/2_requirements.md](docs/2_requirements.md); không giới hạn ở bản thử. Code nền frontend, backend và WebSocket được giữ nguyên.
+
+Quy tắc hiệu suất và thứ tự phân tán được ghi trong [docs/6_architecture.md](docs/6_architecture.md).
 
 ## Bắt đầu
 
-1. Trả lời 5 câu hỏi trong [SPEC.md](SPEC.md).
-2. Yêu cầu agent đọc [AGENTS.md](AGENTS.md), [MAP.md](MAP.md) và SPEC.md, rồi đề xuất một bước nhỏ trong [PLAN.md](PLAN.md).
-3. Sau mỗi thay đổi, yêu cầu agent chạy kiểm tra phù hợp và cập nhật bản đồ/tài liệu nếu cấu trúc hoặc quyết định thay đổi.
+1. Cài Node.js 22+ và Docker Desktop; chạy `npm install` và `docker compose up -d db redis`.
+2. Sao chép `.env.example` thành `.env` rồi thay `ADMIN_EMAIL` và `ADMIN_PASSWORD` bằng giá trị riêng. Các lệnh npm sẽ tự đọc `.env`. Giá trị trong file mẫu chỉ dành cho máy phát triển.
+3. Chạy `npm run db:migrate`; đặt `ADMIN_EMAIL` và `ADMIN_PASSWORD` riêng rồi chạy `npm run admin:create` một lần.
+4. Chạy ba lệnh ở ba terminal: `npm run dev:backend`, `npm run dev:realtime`, `npm run dev:frontend`. Mở `http://127.0.0.1:5173`.
 
-**Mỗi nhiệm vụ liên quan đến repo phải có nhật ký riêng** trong [docs/worklog/](docs/worklog/README.md), ghi yêu cầu, việc đã làm, quyết định, kiểm chứng và phần còn lại. Quy tắc này áp dụng dù plugin `documentation` tắt.
+`PG_POOL_MAX` và `PG_CONNECT_TIMEOUT_MS` trong `.env.example` áp dụng cho từng tiến trình. Khi thêm bản sao, tính tổng pool của tất cả tiến trình trước khi tăng giới hạn PostgreSQL.
 
-## Bật plugin theo nhu cầu
+`REDIS_URL` bật Redis cache. Hiện backend cache danh sách xét duyệt shop trong 15 giây và đổi phiên bản cache khi shop đăng ký hoặc admin ra quyết định. Nếu Redis không sẵn sàng, API đọc PostgreSQL. Redis trong `compose.yaml` chỉ dùng làm cache cục bộ, giới hạn 128 MB và không lưu bền; production cần mạng riêng và cấu hình xác thực phù hợp.
 
-```powershell
-node scripts/plugins.mjs list
-node scripts/plugins.mjs enable prototype
-node scripts/plugins.mjs enable ci-cd
-node scripts/plugins.mjs disable ci-cd
-node scripts/plugins.mjs check
-```
+Các bước hiện tại chỉ kiểm chứng luồng tài khoản và xét duyệt shop. Tin đăng, chat và giữ hàng sẽ được bổ sung tiếp vào source chính thức.
 
-`project.plugins.json` là danh sách plugin đang bật. Mỗi agent đọc file này qua `AGENTS.md` và chỉ áp dụng hướng dẫn của plugin bật. Xem [danh mục plugin](plugins/README.md). Đây là plugin quy trình trong repo, không phải plugin cài vào Codex, Antigravity hay Claude Code.
+Để chạy bài kiểm tra tích hợp trên database riêng, tạo database `chonguon_test` trong PostgreSQL cục bộ, chạy `npm run db:migrate:test` rồi `npm test`. Không trỏ `TEST_DATABASE_URL` tới database chứa dữ liệu thật.
 
-Plugin `independent-review` hiện được bật: agent khác review code trong phiên riêng theo [quy trình và mẫu báo cáo](reviews/README.md) trước khi chủ repo quyết định merge.
-
-Understand Anything được lưu tại `vendor/understand-anything/` và dùng qua plugin `codebase-graph`. Xem [cách build runtime và làm mới graph khi cần](docs/understand-anything.md). Hook sau commit chỉ đánh dấu graph cũ; agent cập nhật graph trước lần dùng tiếp theo.
+**Mỗi nhiệm vụ liên quan đến repo phải có nhật ký riêng** trong [docs/worklog/](docs/worklog/README.md), ghi yêu cầu, việc đã làm, quyết định, kiểm chứng và phần còn lại.
 
 ## Các file chính
 
@@ -32,14 +29,17 @@ Understand Anything được lưu tại `vendor/understand-anything/` và dùng 
 - `CLAUDE.md`: điểm vào tương ứng cho Claude Code.
 - `MAP.md`: bản đồ file và nơi cần tìm thông tin.
 - `SPEC.md`: mục tiêu, ràng buộc và câu hỏi cần chốt.
+- `docs/1_README.md`: thứ tự đọc và vai trò của 12 tài liệu; `docs/2_requirements.md` là đặc tả yêu cầu chuẩn.
+- `docs/11_rules.md`: khung các quy định nền tảng cần soạn và thẩm định.
+- `apps/backend/`: API và các module nghiệp vụ; `apps/frontend/`: giao diện Vite; `apps/realtime/`: WebSocket đã xác thực.
+- `packages/platform/`: kết nối PostgreSQL và phiên dùng chung.
+- `db/migrations/`: thay đổi lược đồ PostgreSQL theo phiên bản.
+- `docs/6_architecture.md`: ranh giới module và các việc cần chuẩn bị để mở rộng tải.
+- `compose.yaml`: PostgreSQL cục bộ cho phát triển.
 - `PLAN.md`: trạng thái và các bước triển khai.
 - `MULTI_AGENT.md`: cách chia việc giữa Codex, Antigravity và Claude Code bằng worktree.
-- `project.plugins.json` và `plugins/`: plugin quy trình có thể bật/tắt cho dự án.
 - `docs/worklog/`: nhật ký bắt buộc cho từng nhiệm vụ của mỗi agent.
 - `governance/`: quy tắc GitHub để chỉ chủ repo merge vào `main`.
-- `reviews/`: yêu cầu và báo cáo review code độc lập.
-- `vendor/understand-anything/`: source Understand Anything đã cố định phiên bản.
 - `contexte/`: quyết định và kiến thức dự án.
-- `livrables/`: sản phẩm đầu ra không phải source code.
 
-Khung này dựa trên [bài viết về Claude Code Harness 3 tầng](https://www.facebook.com/photo.php?fbid=1460250176064963&set=a.101224068634254&type=3). Git đã được khởi tạo và có remote `origin`. Chưa có cấu hình MCP, secrets, stack ứng dụng hay quy trình triển khai vì chưa có yêu cầu tương ứng.
+Ứng dụng dùng Fastify, PostgreSQL, Vite và `ws`. Chạy `npm run build:frontend` để tạo frontend tĩnh. WebSocket `/ws` hiện chỉ kiểm tra phiên và quyền shop, chưa xử lý tin nhắn. Chưa có cấu hình triển khai production.

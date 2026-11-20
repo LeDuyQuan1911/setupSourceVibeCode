@@ -1,6 +1,6 @@
 # Bản đồ dự án
 
-Trạng thái: khung làm việc cho agent; chưa có source ứng dụng.
+Trạng thái: source chính thức đang triển khai; hiện có luồng tài khoản và admin xét duyệt shop.
 
 | Vị trí | Vai trò |
 | --- | --- |
@@ -8,29 +8,29 @@ Trạng thái: khung làm việc cho agent; chưa có source ứng dụng.
 | `AGENTS.md` | Quy tắc làm việc cho coding agent |
 | `CLAUDE.md` | Điểm vào cho Claude Code |
 | `SPEC.md` | Yêu cầu và câu hỏi cần xác định |
+| `apps/backend/src/server.js`, `apps/backend/src/app.js` | Điểm chạy và ghép route API HTTP |
+| `apps/backend/src/core/` | Hàm mật khẩu |
+| `apps/backend/src/modules/identity/` | Tài khoản và đăng nhập; route → service → repository |
+| `apps/backend/src/modules/shops/` | Hồ sơ shop và xét duyệt; route → service → repository |
+| `apps/frontend/` | Giao diện Vite, proxy phát triển `/api` và `/ws` |
+| `apps/realtime/src/` | Tiến trình WebSocket, xác thực phiên và health |
+| `packages/platform/` | Pool PostgreSQL, phiên dùng chung và Redis cache-aside |
+| `db/migrations/` | Lược đồ dữ liệu có phiên bản |
+| `scripts/migrate.mjs`, `scripts/create-admin.mjs` | Cập nhật database và tạo admin ban đầu |
+| `compose.yaml`, `.env.example` | PostgreSQL/Redis cục bộ và tên biến môi trường |
 | `PLAN.md` | Các bước triển khai và trạng thái |
 | `MULTI_AGENT.md` | Cách chia nhiệm vụ và dùng worktree cho nhiều agent |
-| `project.plugins.json` | Danh sách plugin quy trình đang bật |
-| `plugins/<id>/plugin.json` | Tên và mô tả của từng plugin |
-| `plugins/<id>/INSTRUCTIONS.md` | Quy trình chỉ áp dụng khi plugin được bật |
-| `scripts/plugins.mjs` | Lệnh liệt kê, bật/tắt và kiểm tra plugin |
-| `vendor/understand-anything/understand-anything-plugin/` | Source skill, dashboard và core của Understand Anything |
-| `docs/understand-anything.md` | Cách build runtime và cập nhật graph khi cần |
-| `scripts/setup-understand-anything.ps1` | Build runtime và bật hook cục bộ trên Windows |
-| `.githooks/post-commit` | Đánh dấu graph cũ sau commit có thay đổi |
-| `scripts/mark-graph-stale.mjs` | Ghi dấu stale theo commit và file đã đổi |
-| `scripts/graph-status.mjs` | Kiểm tra graph khớp commit hiện tại hay chưa |
 | `docs/worklog/README.md` | Quy ước ghi nhật ký bắt buộc |
 | `docs/worklog/<date>-<agent>-<task>.md` | Kết quả và kiểm chứng của từng nhiệm vụ |
 | `scripts/check-worklog.mjs` | Kiểm tra cấu trúc và độ hoàn tất của worklog |
 | `governance/github-main-ruleset.json` | Cấu hình ruleset GitHub cho quyền merge vào `main` |
 | `governance/README.md` | Quy trình PR và giới hạn quyền merge |
-| `reviews/README.md` | Quy trình review hai lượt để giảm thiên vị |
-| `reviews/templates/REQUEST.md` | Mẫu giao việc trung tính cho reviewer |
-| `reviews/templates/REPORT.md` | Mẫu báo cáo có bằng chứng và kết quả kiểm tra |
-| `scripts/review-brief.mjs` | Tạo yêu cầu review từ hai Git ref mà không kèm danh tính tác giả |
 | `contexte/decisions.md` | Nhật ký quyết định dự án |
-| `livrables/README.md` | Quy ước lưu sản phẩm đầu ra |
 | `.gitignore` | Loại trừ secrets và file sinh ra cục bộ |
 
-Khi có ứng dụng, bổ sung vào đây: entry point, module chính, luồng dữ liệu, lệnh chạy/test và vị trí cấu hình. Chỉ mô tả các file thực sự tồn tại.
+Luồng hiện có: trình duyệt → Vite → `/api` Fastify → module identity/shops → PostgreSQL; kết nối `/ws` → realtime → phiên trong PostgreSQL. Chạy ba lệnh `dev:backend`, `dev:realtime`, `dev:frontend`; kiểm tra bằng `npm test` và `npm run build:frontend`.
+
+
+## Tài liệu
+
+Bộ docs đã gom 14 còn 12 file, đánh số theo thứ tự đọc. Xem [mục lục docs](docs/1_README.md); yêu cầu chuẩn tại [2_requirements.md](docs/2_requirements.md), kiến trúc/hiệu suất tại [6_architecture.md](docs/6_architecture.md).
