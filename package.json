@@ -1,0 +1,33 @@
+{
+  "name": "cho-nguon-iphone",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:backend": "node --env-file=.env --watch apps/backend/src/server.js",
+    "dev:frontend": "vite --config apps/frontend/vite.config.js",
+    "dev:realtime": "node --env-file=.env --watch apps/realtime/src/server.js",
+    "start:backend": "node --env-file=.env apps/backend/src/server.js",
+    "start:realtime": "node --env-file=.env apps/realtime/src/server.js",
+    "build:frontend": "vite build --config apps/frontend/vite.config.js",
+    "db:migrate": "node --env-file=.env scripts/migrate.mjs",
+    "db:migrate:test": "node --env-file=.env scripts/migrate.mjs --test",
+    "admin:create": "node --env-file=.env scripts/create-admin.mjs",
+    "test": "node --env-file=.env --test"
+  },
+  "dependencies": {
+    "@chonguon/platform": "file:packages/platform",
+    "fastify": "^5.12.8",
+    "pg": "^8.23.1",
+    "redis": "^6.3.1",
+    "ws": "^8.22.2"
+  },
+  "devDependencies": {
+    "vite": "^8.3.7"
+  }
+}

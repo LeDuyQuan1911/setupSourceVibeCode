@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#18344d">
+  <title>Chợ nguồn iPhone</title>
+  <link rel="stylesheet" href="/src/style.css">
+  <script type="module" src="/src/main.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Chợ nguồn iPhone, trang chủ"><span class="brand-mark">N</span><span>Chợ nguồn<br><small>iPhone secondhand</small></span></a>
+    <nav aria-label="Tài khoản"><span id="account-label">Dành cho shop</span><button id="logout" type="button" hidden>Đăng xuất</button></nav>
+  </header>
+  <main>
+    <section class="intro">
+      <p class="kicker">Nguồn hàng giữa các shop</p>
+      <h1>Tìm đúng máy.<br>Gặp đúng shop.</h1>
+      <p>Đăng từng chiếc iPhone bạn đang có. Tìm nguồn hàng từ các shop khác trên toàn quốc, trao đổi và sắp xếp lấy hàng trực tiếp.</p>
+    </section>
+    <section id="auth" class="panel-grid" aria-label="Bắt đầu">
+      <div class="panel">
+        <h2>Đăng nhập</h2>
+        <p>Quay lại để xem hồ sơ shop của bạn.</p>
+        <form id="login-form">
+          <label>Email<input name="email" type="email" autocomplete="email" required></label>
+          <label>Mật khẩu<input name="password" type="password" autocomplete="current-password" required></label>
+          <button type="submit">Đăng nhập</button>
+        </form>
+      </div>
+      <div class="panel panel-accent">
+        <h2>Đăng ký shop</h2>
+        <p>Gửi hồ sơ để admin xét duyệt trước khi tham gia chợ.</p>
+        <form id="register-form">
+          <label>Tên shop<input name="shopName" required maxlength="160"></label>
+          <label>Người đại diện<input name="representative" required maxlength="160"></label>
+          <label>Số liên hệ<input name="phone" type="tel" required maxlength="40"></label>
+          <label>Địa chỉ<input name="address" required maxlength="300"></label>
+          <label>Kênh bán hàng hiện có<input name="salesChannel" required maxlength="300" placeholder="Ví dụ: cửa hàng, Facebook, website"></label>
+          <label>Email đăng nhập<input name="email" type="email" autocomplete="email" required></label>
+          <label>Mật khẩu <small>(ít nhất 12 ký tự)</small><input name="password" type="password" autocomplete="new-password" minlength="12" required></label>
+          <button type="submit">Gửi hồ sơ shop</button>
+        </form>
+      </div>
+    </section>
+    <section id="dashboard" class="dashboard" hidden>
+      <div class="dashboard-heading"><p class="kicker">Khu vực làm việc</p><h2 id="dashboard-title"></h2><p id="dashboard-description"></p></div>
+      <div id="admin-shops" hidden><h3>Hồ sơ shop</h3><div id="shop-list"></div></div>
+      <div id="shop-status" hidden></div>
+    </section>
+    <p id="notice" class="notice" role="status" aria-live="polite"></p>
+  </main>
+  <footer>Chợ nguồn iPhone · Nền tảng đang được xây dựng theo từng luồng nghiệp vụ.</footer>
+</body>
+</html>

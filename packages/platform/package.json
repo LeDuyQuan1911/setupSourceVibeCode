@@ -1,0 +1,10 @@
+{
+  "name": "@chonguon/platform",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./db": "./db.js",
+    "./session": "./session.js",
+    "./cache": "./cache.js"
+  }
+}
