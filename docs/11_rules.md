@@ -3,7 +3,7 @@
 Tài liệu này là danh sách phần cần xây dựng cùng chủ nền tảng. Chưa phải điều khoản sử dụng hoặc tư vấn pháp lý.
 
 1. **Tham gia:** hồ sơ shop mới gồm tên shop, người đại diện, số liên hệ, địa chỉ và kênh bán hàng hiện có; quyền đánh giá của shop cũ, tiêu chí admin duyệt/từ chối, đánh giá trái chiều và cách nộp lại. Đánh giá không bắt buộc; admin có thể tự kiểm tra và duyệt khi chưa có đánh giá. Chỉ shop được duyệt mới giao dịch trên chợ. CTV thuộc shop, chỉ tiếp cận sản phẩm shop giao.
-2. **Tin đăng:** bản đầu cho mọi dòng iPhone secondhand; Apple là danh mục cấp cao để mở rộng sau. Tin bắt buộc có mẫu máy, dung lượng lưu trữ, màu, ngoại hình, pin, lỗi/linh kiện đã thay, tình trạng iCloud, ảnh thật, phụ kiện, thời hạn bảo hành và giá bán cho shop khác. Cần quy định cách kiểm tra mô tả sai và có thu thập serial/IMEI hay không; không thu thập mật khẩu iCloud.
+2. **Tin đăng:** bản đầu cho mọi dòng iPhone secondhand; Apple là danh mục cấp cao để mở rộng sau. Tin xuất bản bắt buộc có mẫu máy, dung lượng lưu trữ, màu, ngoại hình, pin, lỗi/linh kiện đã thay, tình trạng iCloud, ảnh thật, phụ kiện, thời hạn bảo hành, giá bán cho shop khác và IMEI; chưa đọc được IMEI chỉ lưu nháp. Pin nhập số % nguyên hoặc chọn Không đọc được; trường không có/chưa rõ phải khai rõ theo CAT-01. Serial tùy chọn. Các máy/tin có thể trùng IMEI; IMEI không phải khóa duy nhất. Cần quy định cách kiểm tra mô tả sai; không thu thập mật khẩu iCloud.
 
    Tin chợ có hiệu lực 90 ngày; hết hạn thì ẩn và báo shop để gia hạn tin trong 3 ngày. Nếu shop không gia hạn tin, xóa tin; giữ riêng lịch sử giao dịch/hội thoại đã phát sinh. Cần quy định tin đang có lượt giữ hoặc giao dịch mở khi đến hạn xóa.
 3. **Giá:** shop nguồn niêm yết giá lấy hàng cho từng máy; reseller tự đặt giá bán cho khách nhưng không thấp hơn giá lấy hàng; không thương lượng giảm giá nguồn. Một mẫu có nhiều máy thì danh mục của từng shop hiển thị khoảng giá từ các máy đang bán; giữ hàng và giao dịch vẫn theo giá của máy cụ thể. Lượt giữ hàng đã được shop nguồn xác nhận dùng giá tại thời điểm giữ; trong thời hạn hiệu lực, nguồn không được sửa giá niêm yết của máy đó. Hủy/hết hạn giữ thì máy chưa bán mới được sửa giá. Khi giá nguồn đổi, sản phẩm đã treo trên website reseller tạm ẩn và báo cho reseller; chỉ hiện lại sau khi reseller nhấn “Treo lại”. Giá bán mặc định giữ tiền lời cũ, trừ khi giá nguồn mới vượt giá bán cũ thì bằng giá nguồn mới. Cần quy định thời điểm khóa giá nếu đơn chưa có lượt giữ được xác nhận.
@@ -27,7 +27,7 @@ Bộ quy định cho sản phẩm chính thức phải bao gồm chợ B2B, webs
 
 ## Nguyên tắc máy đã bán — đã chốt
 
-Shop không được tái đăng hoặc mở bán lại máy đã sold; giữ lịch sử theo quyền và retention đã duyệt. Kho Đã bán không phải category hàng hóa. Sai thao tác/hoàn trả chưa có ngoại lệ tự đảo sold; xem CAT-06.
+Shop không được tái đăng item/tin đã sold hoặc đảo trạng thái đơn cũ; giữ lịch sử theo quyền và retention đã duyệt. Máy khách trả muốn bán tiếp được shop đang sở hữu đăng thành hàng/tin mới theo quy trình thường. Kho Đã bán không phải category hàng hóa; xem CAT-06.
 
 ## Kiểm tra đăng tin bằng quy tắc — nguyên tắc đã chốt 2026-11-18
 

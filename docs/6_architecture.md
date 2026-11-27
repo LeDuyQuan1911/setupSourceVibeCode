@@ -17,13 +17,13 @@ flowchart LR
   API --> DB[(PostgreSQL)]
   API --> Cache[(Redis cache)]
   Realtime --> DB
-  API --> Media[(Object storage)]
+  API --> Media[(Cloudflare R2 ban đầu)]
   PaymentProvider[Bên cung cấp QR / webhook, dự kiến] --> API
   Worker[Worker theo thời gian] --> DB
   Worker --> Media
 ```
 
-Vite proxy `/api` và `/ws` khi phát triển. Khi triển khai, reverse proxy cần phục vụ frontend build và chuyển hai đường dẫn này về backend/realtime trên cùng origin HTTPS, giữ `Host` và `Origin` của trình duyệt, và hỗ trợ WebSocket upgrade. Redis cache cục bộ đã có trong Compose; Redis production và reverse proxy production, object storage, worker **chưa có trong source**. Nhà cung cấp hạ tầng chưa chọn.
+Vite proxy `/api` và `/ws` khi phát triển. Khi triển khai, reverse proxy cần phục vụ frontend build và chuyển hai đường dẫn này về backend/realtime trên cùng origin HTTPS, giữ `Host` và `Origin` của trình duyệt, và hỗ trợ WebSocket upgrade. Redis cache cục bộ đã có trong Compose; Redis production, reverse proxy production, tích hợp Cloudflare R2 và worker **chưa có trong source**. Đã chọn R2 làm object storage ban đầu cho ảnh/tệp; nhà cung cấp máy chủ, database production và quy trình lưu trữ lạnh chưa chốt. Media phải được tham chiếu qua ID/metadata nội bộ để có thể chuyển provider về sau mà không đổi liên kết trong tin/đơn.
 
 ## Cấu trúc source
 
@@ -61,7 +61,7 @@ Một module thêm tính năng nên có `routes.js` (HTTP), `service.js` (quy t�
 | --- | --- | --- |
 | Identity | users, sessions | Token phiên lưu hash; xác thực trước route riêng |
 | Shops | shops, shop_memberships, shop_reviews | Admin duyệt; đánh giá shop cũ chỉ tham khảo; CTV thuộc shop |
-| Catalog | categories, product_groups, product_models, inventory_items, listings, media | Một tin là một máy; shop nguồn sở hữu giá và trạng thái; sold là trạng thái kết thúc, lưu mục Đã bán |
+| Catalog | categories, product_groups, product_models, inventory_items, listings, media | Một tin là một máy; shop nguồn sở hữu giá và trạng thái. Item/đơn đã bán giữ lịch sử; máy khách trả muốn bán tiếp được tạo thành hàng/tin mới theo luồng đăng thường, không mở lại item cũ |
 | Conversations | conversations, participants, messages, attachments | Chỉ shop tham gia được đọc; tệp tối đa 10 MB |
 | Holds | holds | Một máy chỉ có một lượt giữ hiệu lực; thời hạn 12–72 giờ theo cấu hình A đặt riêng cho B, chụp lúc xác nhận cùng giá; không đổi hạn đang chạy hoặc sửa giá máy nguồn trong thời gian giữ |
 | Notifications | notifications | Không gửi trùng cho cùng một sự kiện |

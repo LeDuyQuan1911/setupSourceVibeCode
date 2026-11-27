@@ -1,6 +1,8 @@
 # Vận hành, phát hành và khôi phục
 
-Trạng thái: runbook phát triển hiện có và kế hoạch production đề xuất. Chưa có cấu hình triển khai production, worker, object storage hoặc pipeline tự động trong repo.
+Trạng thái: runbook phát triển hiện có và kế hoạch production đề xuất. Đã chọn Cloudflare R2 làm object storage ban đầu; chưa có cấu hình hoặc tích hợp production, worker hay pipeline tự động trong repo.
+
+Khóa và thông tin kết nối R2 chỉ đặt trong cấu hình bí mật của server khi triển khai, không đưa vào dashboard admin, DB cấu hình giá/giới hạn, frontend, audit hay worklog. Dashboard admin chỉ chỉnh giá gói và các giới hạn sử dụng đã được duyệt; theo dõi phiên thay đổi để không sửa kỳ shop đã trả.
 
 ## Môi trường
 
