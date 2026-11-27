@@ -703,3 +703,296 @@ Ghi mỗi quyết định quan trọng theo mẫu dưới đây. Stack và cấu
 - Quyết định: chủ shop hủy được lời mời chưa accepted; lời mời chuyển cancelled và link/token cũ mất hiệu lực ngay, kể cả chưa hết 7 ngày. Hủy lời mời không vô hiệu tài khoản Gmail và không tước quyền CTV nếu lời mời đã được chấp nhận; trường hợp đã tham gia dùng luồng ngừng hợp tác CTV. Hủy không tự gửi lời mời khác.
 - Lý do: chủ shop kiểm soát lời mời chưa tạo membership mà không tác động tài khoản hoặc giao dịch đã hình thành.
 - Hệ quả / khi nào xem lại: đồng bộ SPEC, PLAN, CTV-01/02, workflow, UI, quyền, data/API, T-44 và quyết định mở. Chưa sửa code; nhiều lời mời pending tới cùng Gmail và quyền xem lịch sử sau rời shop còn cần chốt.
+### 2026-11-21 — Năm quy tắc CTV bổ sung
+
+- Bối cảnh: chủ dự án trả lời một lượt các câu hỏi CTV còn mở về lời mời, quay lại shop, lịch sử, giá và request chờ duyệt.
+- Quyết định: mỗi shop/Gmail chỉ có một lời mời còn hiệu lực; nhiều shop được mời cùng Gmail nhưng khi CTV chấp nhận một shop, lời mời còn lại hết hiệu lực. Rời shop muốn quay lại cần lời mời mới. CTV đã rời được đọc snapshot request/giao dịch của chính mình, không xem hàng/giá hiện tại, giá/danh tính nguồn hay lịch sử người khác. Chủ shop được đặt giá CTV dưới giá bán công khai; hàng resell không thấp hơn giá nguồn A, giá nguồn không hiện cho CTV. Request chờ chủ shop duyệt hết hạn sau 24 giờ từ lúc tạo/gửi lại, hoặc kết thúc ngay khi máy sold; không giữ máy. Hạn 12 giờ xác nhận lại sau đổi giá giữ nguyên và độc lập.
+- Lý do: chủ dự án xác nhận cả năm phương án trong hội thoại ngày 2026-11-21.
+- Hệ quả / khi nào xem lại: đồng bộ SPEC, PLAN và bộ docs CTV; chưa có code. Định nghĩa giá đầu vào chính xác cho tự điều chỉnh giá CTV và trường hợp giá đổi nhiều lần khi chờ xác nhận lại vẫn cần chốt.
+
+### 2026-11-21 — Giá CTV đổi lặp lại và hàng chờ treo lại
+
+- Bối cảnh: chủ dự án yêu cầu hàng resell đang chờ B treo lại phải tạm ẩn với CTV và chốt phương án khi giá đổi nhiều lần trong lúc CTV xác nhận lại.
+- Quyết định: hàng chờ B treo lại không hiện trong nguồn hàng CTV, không tạo/gửi lại request mới cho tới khi B treo lại hợp lệ. Nếu giá đổi thêm khi request còn chờ xác nhận lại, chỉ giá mới nhất hiển thị và hạn 12 giờ tính lại từ lần đổi mới nhất; CTV nhập số tiền đề xuất mới và gửi lại một request mới. Request đã hết hạn trước lần đổi tiếp theo không được hồi sinh.
+- Lý do: CTV không giao dịch trên bản treo chưa được B xác nhận lại; request phải phản ánh giá mới nhất và hành động rõ ràng của CTV.
+- Hệ quả / khi nào xem lại: đồng bộ yêu cầu, workflow, UI, quyền, API và kiểm thử; chưa có code. Giá đầu vào chính xác dùng để tự điều chỉnh giá CTV theo từng loại hàng vẫn cần chủ dự án chốt.
+
+### 2026-11-21 — Giá bán B làm mốc điều chỉnh giá CTV
+
+- Bối cảnh: chủ dự án yêu cầu giải thích lại “giá mốc” và xác nhận ví dụ B bán 12 → 13 triệu, giá CTV 11 → 12 triệu.
+- Quyết định: dùng giá bán B của cùng máy làm mốc cho cả hàng B tự sở hữu và hàng resell. Giá CTV mới bằng giá CTV cũ cộng phần thay đổi giá B; hàng resell phải không thấp hơn giá nguồn A, nhưng giá bán B không phải sàn giá CTV. Khi A đổi giá và B cần treo lại, hàng tạm ẩn với CTV; đợi B treo lại hợp lệ và xác định giá B mới rồi mới tính giá CTV/mở lại nếu đủ điều kiện. Giá A không trực tiếp làm mốc chênh lệch. Request/đơn đã duyệt giữ giá snapshot.
+- Lý do: chủ dự án chốt công thức theo giá bán B và yêu cầu CTV không thấy hàng trong lúc chờ B treo lại.
+- Hệ quả / khi nào xem lại: đồng bộ SPEC, PLAN, yêu cầu, workflow, UI, data/API, test và sổ quyết định mở; chưa triển khai code.
+
+### 2026-11-21 — Tin hết hạn có giao dịch mở
+
+- Bối cảnh: cần xác định tin hết kỳ 90 ngày/cửa sổ gia hạn 3 ngày khi hold hoặc đơn vẫn đang xử lý.
+- Quyết định: tin expired không nhận khách/request mới; hold/đơn đã mở tiếp tục theo hạn riêng. Giao dịch thất bại không tự hiện máy khi tin expired; shop phải gia hạn tin hợp lệ trong cửa sổ 3 ngày nếu muốn bán tiếp. Quá cửa sổ, mất quyền gia hạn dù còn giao dịch mở; giữ bản ghi tin/snapshot cho tới khi giao dịch kết thúc rồi lưu lịch sử và dọn khỏi khu vực bán, không xóa dây chuyền đơn/hold.
+- Lý do: chủ dự án chốt mục 2 và 3 trong lượt thảo luận; bảo toàn giao dịch đã bắt đầu và lịch sử.
+- Hệ quả / khi nào xem lại: cập nhật SPEC, PLAN, yêu cầu, workflow, UI, data/API, test và DEC-05. Cách tính 90/3 ngày theo 24 giờ hay ngày lịch và biên thời điểm hết hạn vẫn cần giải thích/chốt. Chưa triển khai code.
+
+### 2026-11-21 — Thời hạn tin tính theo giờ
+
+- Bối cảnh: chủ dự án đã chốt xử lý tin hết hạn có giao dịch mở và cần chọn cách tính kỳ 90 ngày/cửa sổ gia hạn 3 ngày.
+- Quyết định: `expires_at = published_at + 90 × 24 giờ`, `renewal_deadline = expires_at + 3 × 24 giờ` theo giờ server/DB. Tin chỉ nhận giao dịch mới khi `now < expires_at`; gia hạn chỉ khi `expires_at <= now < renewal_deadline`. Đúng từng mốc thì quyền tương ứng hết, dù worker cập nhật trạng thái trễ. Ví dụ đăng 15:00 ngày 01/01/2026 thì tin hết 15:00 ngày 01/04 và hết quyền gia hạn 15:00 ngày 04/04.
+- Lý do: chủ dự án chọn phương án tính theo giờ sau ví dụ so sánh với ngày lịch.
+- Hệ quả / khi nào xem lại: đồng bộ SPEC, PLAN, LIST-01, workflow, data/API, T-10 và DEC-05. Chưa có code; chính sách lưu/xóa vật lý tin sau khi giao dịch kết thúc còn mở.
+
+### 2026-11-21 — Archive tin quá hạn chưa bán và tạo tin mới cùng máy
+
+- Bối cảnh: chủ dự án chốt cách xử lý tin đã quá cửa sổ gia hạn, hết giao dịch mở nhưng item vẫn chưa bán.
+- Quyết định: archive tin khỏi chợ, không đưa item vào Đã bán và không hard-delete tin tự động. Chủ shop đọc lịch sử tin; bên từng giao dịch chỉ đọc snapshot giao dịch của mình. Chủ shop kiểm tra/cập nhật tình trạng và ảnh rồi tạo tin mới cho chính item chưa sold, bắt đầu kỳ 90 ngày mới; tin cũ không được hồi sinh, không tạo item trùng và tối đa một tin có hiệu lực/đang có giao dịch mở cho một item. Item sold vẫn không thể bán lại.
+- Lý do: bảo toàn lịch sử máy và giao dịch trong khi cho phép bán lại đúng máy chưa sold sau khi tin cũ hết quyền gia hạn.
+- Hệ quả / khi nào xem lại: cập nhật SPEC, PLAN, LIST-01, workflow, UI, data/API, test và bỏ câu hỏi DEC-05 đã giải quyết. Chính sách dữ liệu cá nhân/media và yêu cầu xóa riêng thuộc DEC-07; chưa triển khai code.
+
+### 2026-11-21 — Sửa thông tin máy và nhận diện trùng
+
+- Bối cảnh: chủ dự án trả lời nhóm câu hỏi về sửa tình trạng/ảnh khi máy bán hoặc đang giao dịch và nhận diện cùng một máy iPhone.
+- Quyết định: shop nguồn được sửa tình trạng, phụ kiện, bảo hành, ảnh khi chưa có hold/đơn mở; thông tin quan trọng đổi làm bản treo reseller tạm ẩn chờ B xem/treo lại, CTV tạm không thấy máy. Khi có hold/đơn mở, khóa sửa các trường/ảnh này đến khi giao dịch kết thúc, giao dịch giữ snapshot ban đầu. Thu IMEI/serial làm mã nhận diện riêng tư để phát hiện nhập trùng máy trên toàn chợ; chỉ shop sở hữu/người quản trị có quyền phù hợp xem, không công khai cho reseller/CTV/khách.
+- Lý do: ba phương án được chủ dự án xác nhận; mỗi máy secondhand là một đơn vị hàng riêng, thông tin có thể thay đổi nhưng giao dịch mở cần giữ cam kết.
+- Hệ quả / khi nào xem lại: đồng bộ SPEC, PLAN, CAT-01/02, workflow, UI, quyền, data/API và test; chưa có code. Cần chốt trường IMEI/serial chính xác, máy không đọc được/sai mã và xử lý máy sold bị trả về/bấm nhầm. Đề xuất tạo item mới để bán lại máy returned chưa được chấp nhận vì có thể tạo vòng lặp sold → mở lại.
+
+### 2026-11-21 — Khách trả hàng và A mở bán lại từ đơn cũ
+
+- Bối cảnh: chủ dự án muốn xử lý khách trả máy sau khi đơn đã bán mà không cần admin duyệt từng ca, đồng thời phân biệt shop tự thu mua máy từ khách trong giao dịch ngoài website của giai đoạn sau.
+- Quyết định: khi khách trả hàng của đơn đã bán, chỉ shop nguồn A bấm Mở bán lại trên chính đơn sau khi máy về; giữ cùng item/IMEI và toàn bộ lịch sử các lần bán/trả, tạo kỳ tin mới 90 × 24 giờ từ lúc bấm. Hàng resell đã chịu phí 50.000đ ở lần đầu không trừ thêm phí ở mọi lần bán lại trong cùng chuỗi trả hàng, kể cả trả nhiều lần; không tự hoàn phí gốc. Shop tự thu mua máy từ khách là giao dịch ngoài website thuộc giai đoạn sau, không phải trả hàng của đơn cũ. Quy tắc phí hiện tại vẫn chỉ thu reseller bán hàng nguồn; hàng shop tự sở hữu không chịu 50.000đ.
+- Lý do: chủ dự án muốn một nút xử lý trả hàng trên đơn, không thêm bước admin, và đã chọn rõ chỉ A bấm cùng việc miễn phí qua mọi lần trả hàng.
+- Hệ quả / khi nào xem lại: cập nhật SPEC, PLAN, CAT-06/FEE-02, workflow, UI, quyền, data/API và test; chưa có code. Cần thiết kế chuỗi sale/return và idempotency; thao tác bấm nhầm Đã bán vẫn còn mở. Không tự giới hạn số lần trả hàng trái quyết định.
+
+### 2026-11-21 — COD thất bại, reseller chọn treo lại và phạm vi thu mua cũ
+
+- Bối cảnh: chủ dự án làm rõ COD resell giao không thành công khác với khách trả hàng sau khi đơn đã bán thành công; shop tự thu mua máy từ khách là việc của giai đoạn sau.
+- Quyết định: COD thất bại giữ nguyên hoàn đúng phí 50.000đ đã trừ cho B một lần; B nhận thông báo đơn thất bại. Khi A đã đưa máy chưa sold lên chợ lại, B được hỏi có muốn treo lại trên website B hay không; B chủ động chọn, không tự hiện bản treo/CTV. Nếu về sau có đơn COD mới với cọc hợp lệ, B lại chịu phí 50.000đ theo quy tắc thường. Miễn thêm phí qua các lần bán lại chỉ áp dụng cho chuỗi khách trả hàng sau đơn đã sold. Shop tự thu mua máy từ khách diễn ra bên ngoài; giai đoạn sau chỉ bổ sung dashboard quản lý máy đã thu, không phải luồng trả hàng đơn cũ.
+- Lý do: giữ ranh giới hai trạng thái giao dịch và không áp ngoại lệ phí của hàng returned cho COD chưa bán thành công.
+- Hệ quả / khi nào xem lại: đồng bộ SPEC, PLAN, yêu cầu, workflow, UI, API và test; chưa triển khai code. Dashboard thu mua thuộc giai đoạn sau; không làm thay đổi phạm vi phí hiện tại chỉ thu reseller bán hàng nguồn.
+
+### 2026-11-21 — Đính chính quy tắc IMEI
+
+- Bối cảnh: chủ dự án làm rõ rằng không chỉ các tin mà cả các bản ghi máy khác nhau đều có thể trùng IMEI; cách hiểu trước đây về IMEI unique theo item là sai.
+- Quyết định: IMEI bắt buộc khi đăng iPhone nhưng không unique ở mức item hay tin. Chấp nhận nhiều item/tin cùng IMEI, kể cả khác shop; không chặn, không tự gộp và không khóa giao dịch các item chỉ vì trùng IMEI. Item ID và liên kết đơn/item quản lý tồn kho, lịch sử bán và luồng trả hàng. Quyết định này thay thế mọi câu trước đây nói IMEI/serial dùng để chặn trùng máy hoặc IMEI duy nhất theo item.
+- Lý do: đây là yêu cầu trực tiếp của chủ dự án; IMEI là dữ liệu cần nhập, không phải định danh duy nhất trong nghiệp vụ.
+- Hệ quả / khi nào xem lại: không tạo unique constraint/index hoặc lỗi API do IMEI đã tồn tại; kiểm thử chấp nhận item/tin trùng IMEI. Hệ thống chỉ chống bán trùng theo item ID, không thể tự chứng minh hai item ID khác nhau không cùng một máy thực tế bằng IMEI. Chưa triển khai code.
+
+### 2026-11-21 — Xác nhận khi đánh dấu sản phẩm đã bán
+
+- Bối cảnh: sau khi trao đổi về trường hợp A bấm nhầm Sản phẩm đã bán, chủ dự án chọn bước xác nhận ngay tại nút thay vì thêm chức năng hủy dấu Đã bán.
+- Quyết định: nút Sản phẩm đã bán thủ công hiện popup hỏi có chắc muốn đánh dấu đã bán; chỉ gửi thao tác khi A xác nhận, hủy popup thì giữ nguyên. Không thêm luồng hoàn tác sold riêng. Quy tắc Mở bán lại từ đơn khách trả hàng vẫn là luồng khác.
+- Lý do: thao tác đơn giản, giúp tránh nhấn nhầm mà không thêm một vòng đời bán mới.
+- Hệ quả / khi nào xem lại: UI cần popup; API vẫn kiểm tra quyền, trạng thái và giao dịch mở. Chưa triển khai code; popup không phải bằng chứng máy thực sự đã bán.
+
+### 2026-11-21 — Serial tùy chọn và xử lý IMEI thiếu hoặc sai
+
+- Bối cảnh: chủ dự án chốt nhóm câu hỏi còn mở sau khi xác nhận IMEI bắt buộc nhưng không duy nhất.
+- Quyết định: serial không bắt buộc. iPhone chưa đọc/nhập được IMEI chỉ lưu nháp, chưa được xuất bản bán. Nếu nhập sai, shop nguồn A được sửa IMEI khi máy chưa có hold/đơn mở và chưa sold; khi giao dịch đang mở khóa sửa, lịch sử máy đã bán giữ nguyên. Các item/tin vẫn được trùng IMEI.
+- Lý do: giữ dữ liệu tối thiểu để công bố tin mà không buộc serial hoặc dùng IMEI làm khóa duy nhất; tránh đổi thông tin máy giữa giao dịch.
+- Hệ quả / khi nào xem lại: validation xuất bản khác validation lưu nháp; server kiểm tra trạng thái trước sửa IMEI và ghi audit. Đồng bộ SPEC/PLAN/CAT-01, UI, quyền, data/API và nghiệm thu. Chưa triển khai code.
+
+### 2026-11-24 — Admin quản lý danh mục, mẫu ngừng dùng không ảnh hưởng hàng cũ
+
+- Bối cảnh: chủ dự án chốt ba đề xuất về quyền quản lý danh mục và yêu cầu giữ luồng đơn giản.
+- Quyết định: chỉ admin thêm/sửa/ngừng sử dụng danh mục, nhóm và mẫu. Shop chọn mẫu có sẵn; thiếu mẫu thì tự nhắn admin để admin thêm, không xây chức năng gửi đề nghị trong website. Mẫu ngừng sử dụng chỉ bị ẩn khỏi lựa chọn cho hàng mới; item/tin đã gắn mẫu đó tiếp tục bán theo quy tắc thường, không bị ẩn hoặc dừng giao dịch vì mẫu ngừng dùng.
+- Lý do: giữ dữ liệu danh mục nhất quán mà không thêm quy trình duyệt mẫu; hàng đang kinh doanh không bị gián đoạn.
+- Hệ quả / khi nào xem lại: kiểm tra `active` khi tạo item mới, không dùng nó để chặn xuất bản/gia hạn/tạo kỳ tin cho item cũ. Giữ FK và lịch sử. Chưa triển khai code.
+
+### 2026-11-27 — Trường nhập tin iPhone
+
+- Bối cảnh: chủ dự án muốn shop tự nhập thông tin pin và giao Codex quyết định các chi tiết nhập liệu đơn giản của tin iPhone.
+- Quyết định: pin là số phần trăm nguyên 0–100 do shop nhập hoặc chọn Không đọc được; không coi 0 là không đọc được. Dung lượng nhập số GB nguyên dương; màu, ngoại hình, lỗi, linh kiện đã thay và phụ kiện có ô mô tả, khai rõ Không có/Không rõ khi phù hợp. iCloud chọn Đã đăng xuất/Còn đăng nhập/Không xác định; bảo hành là số ngày nguyên không âm (0 là Không bảo hành) hoặc Chưa xác định; giá nguồn VND nguyên dương, khu vực tỉnh/thành, ít nhất một ảnh thật. Nháp được thiếu trường; xuất bản phải đủ và lỗi trả theo trường. Không đổi IMEI bắt buộc/không unique và serial tùy chọn.
+- Lý do: thao tác nhập trực tiếp, không ép các tình trạng máy secondhand khác nhau vào một bộ nhãn cứng; trường không đọc được hoặc không có được hiển thị rõ.
+- Hệ quả / khi nào xem lại: đồng bộ yêu cầu, UI, data/API, kiểm thử. Bộ lọc tìm kiếm chi tiết, giới hạn/định dạng ảnh và quy tắc kiểm tra mô tả sai vẫn cần chốt riêng. Chưa triển khai code.
+
+### 2026-11-27 — Giới hạn và quyền xem nhận xét hồ sơ shop
+
+- Bối cảnh: chủ dự án chốt cách shop đã được duyệt nhận xét shop đang chờ xét duyệt.
+- Quyết định: mỗi shop approved gửi tối đa một nhận xét cho mỗi lần nộp hồ sơ pending, có nội dung và cơ sở quen biết/giao dịch; được sửa hoặc rút trước khi admin ra quyết định, sau đó chỉ đọc. Shop gửi xem nhận xét của mình; admin xem tất cả; shop nộp hồ sơ và các shop khác không xem nhận xét của người khác. Admin quyết định cuối và không cần nhận xét tối thiểu.
+- Lý do: một nguồn tham khảo có thể được cập nhật khi hồ sơ còn mở, nhưng quyền duyệt vẫn thuộc admin và nhận xét riêng của các shop không bị công khai.
+- Hệ quả / khi nào xem lại: schema cần định danh từng lần nộp và giữ lịch sử sửa/rút; API kiểm tra tác giả/trạng thái. Cách xử lý nhận xét mâu thuẫn hoặc lạm dụng vẫn mở. Chưa triển khai code.
+
+### 2026-11-27 — Admin tự đánh giá nhận xét shop
+
+- Bối cảnh: chủ dự án làm rõ nhận xét về shop mới chỉ được admin đọc để tự đánh giá; câu hỏi phân loại nhận xét tích cực/tiêu cực hoặc xây luồng xử lý mâu thuẫn là không cần thiết.
+- Quyết định: admin xem toàn bộ nhận xét cùng hồ sơ và tự quyết định duyệt/từ chối, kể cả khi nhận xét trái chiều hoặc không có nhận xét. Website không phân loại nhận xét tích cực/tiêu cực, không tính điểm/phiếu và không có quy trình riêng cho nhận xét mâu thuẫn. Quy tắc số lượng, sửa/rút và quyền xem đã chốt trước đó vẫn giữ.
+- Lý do: đây là đánh giá thủ công của admin, không phải trạng thái nghiệp vụ cần hệ thống suy luận.
+- Hệ quả / khi nào xem lại: bỏ DEC-02 khỏi danh sách quyết định mở; UI chỉ hiển thị nhận xét, không thêm bộ phân loại/điểm. Chưa triển khai code.
+
+### 2026-11-27 — Nộp lại hồ sơ shop hết hạn hoặc bị từ chối
+
+- Bối cảnh: thời hạn xét duyệt 30 ngày đã chốt nhưng cách nộp lại và giữ lịch sử từng lần còn mở.
+- Quyết định: lần nộp pending hết hạn đúng `submitted_at + 30 × 24 giờ` nếu admin chưa quyết định; từ mốc đó admin không duyệt/từ chối lần cũ. Shop dùng cùng tài khoản và shop để sửa năm trường rồi nộp lần mới, bắt đầu 30 ngày mới. Shop rejected thấy lý do và được nộp lại ngay theo cách đó, không có luồng khiếu nại riêng. Lần nộp, quyết định và nhận xét cũ giữ lịch sử; nhận xét không tự chuyển sang lần mới; mỗi shop tối đa một lần pending còn hiệu lực.
+- Lý do: shop có đường nộp lại rõ ràng mà không tạo tài khoản/shop trùng hoặc dùng lại nhận xét cũ cho thông tin đã sửa.
+- Hệ quả / khi nào xem lại: schema cần ID/snapshot riêng mỗi lần nộp, kiểm tra hạn bằng giờ DB và chặn admin quyết định quá hạn dù worker trễ. UI cho sửa/nộp lại cùng tài khoản. Chưa triển khai code.
+
+### 2026-11-27 — Trường hồ sơ pending cho shop đã duyệt
+
+- Bối cảnh: dashboard hồ sơ pending và năm tiêu chí đánh giá đã chốt, nhưng phạm vi trường shop cũ được xem còn mở.
+- Quyết định: shop approved được tìm và xem đủ năm trường của hồ sơ pending còn hạn: tên shop, người đại diện, số liên hệ, địa chỉ, kênh bán hàng. Khách, CTV và shop chưa approved không xem dashboard hoặc hồ sơ shop khác. Quyền này không mở nhận xét của shop khác.
+- Lý do: shop đã tham gia cần đúng năm trường để tự đánh giá theo tiêu chí đã chốt, nhất là kênh bán hàng.
+- Hệ quả / khi nào xem lại: API lọc theo quyền và hạn application; hồ sơ hết hạn/đã quyết định không còn trong dashboard pending. Chưa triển khai code.
+
+### 2026-11-27 — Danh sách bán được theo shop và CTV đứng bán
+
+- Bối cảnh: chủ dự án làm rõ mục Đã bán không chỉ dành cho shop nguồn sở hữu item; reseller và CTV cũng cần xem các giao dịch mình bán được.
+- Quyết định: mỗi shop xem giao dịch shop mình đứng bán, gồm hàng tự sở hữu và resell. Ví dụ A bán 10 máy thì A thấy 10 giao dịch; B bán 3 máy nguồn A thì B thấy 3 giao dịch với cột shop nguồn A. CTV thấy đơn/giao dịch chính mình tham gia bán trong shop, bất kể hàng shop sở hữu hay resell; chủ shop xem toàn bộ giao dịch shop. CTV vẫn không thấy danh tính/giá nguồn theo quyết định CTV trước đó. Một lần bán chỉ ghi/đếm một lần cho shop đứng bán, không cộng đôi do CTV; shop nguồn vẫn thấy trạng thái/lịch sử item thuộc kho mình theo quyền nguồn.
+- Lý do: phản ánh đúng người bán và công việc của CTV, đồng thời vẫn quản lý tình trạng máy nguồn để tránh bán lại máy đã sold.
+- Hệ quả / khi nào xem lại: lưu seller shop, source shop và CTV attribution trên giao dịch bán; tách truy vấn số bán được khỏi lịch sử tồn kho nguồn. Chưa triển khai code; việc công khai số liệu bán cho người ngoài chưa chốt.
+
+### 2026-11-27 — Đính chính mục Đã bán khi reseller bán máy nguồn
+
+- Bối cảnh: cách diễn giải danh sách theo shop đứng bán ở quyết định ngay trên không đúng ý chủ dự án.
+- Quyết định: B bán máy của A thì chính item của A chuyển Đã bán; A và B đều xem được cùng máy đó, cột Người bán ghi B, B thấy Shop nguồn A. Không tạo máy hay danh sách bán riêng để tách máy của A khỏi B. CTV chỉ xem đơn/giao dịch mình tham gia trong shop, không thấy danh tính/giá nguồn.
+- Lý do: một máy thực tế chỉ có một trạng thái hiện hành; người xem cần biết ai đã bán máy.
+- Hệ quả / khi nào xem lại: mục Đã bán lọc theo shop nguồn hoặc shop đứng bán và trả cùng item ID; lấy Người bán từ lần bán hiện hành, giữ các lần bán cũ trong lịch sử trả hàng. Quyết định này thay cách diễn giải và hệ quả về danh sách/số bán được ở mục ngay trên. Chưa triển khai code.
+
+### 2026-11-27 — CTV cùng thấy máy đã bán, chỉ hiện shop quản lý
+
+- Bối cảnh: cần làm rõ CTV tham gia bán cũng phải thấy máy đã bán, tương tự A và B.
+- Quyết định: B bán máy nguồn A có CTV tham gia thì A, B và CTV đó cùng xem chính item đã bán. Cột Người bán là B; với CTV chỉ hiện shop quản lý B, không hiện shop nguồn A hoặc giá nguồn. CTV chỉ xem máy/đơn mình tham gia, dù hàng shop sở hữu hay resell.
+- Lý do: trạng thái đã bán thuộc một máy; mỗi bên tham gia được xem theo quyền của mình.
+- Hệ quả / khi nào xem lại: truy vấn Đã bán cho CTV dựa trên liên kết CTV ở lần bán hiện hành và ẩn trường nguồn trong API; không tạo item hay lần bán phụ. Chưa triển khai code.
+
+### 2026-11-27 — Ghi rõ shop nguồn, shop bán và CTV bán
+
+- Bối cảnh: khi CTV thuộc B trực tiếp bán máy nguồn A, chỉ ghi cột Người bán là B chưa cho biết CTV nào bán.
+- Quyết định: trên cùng item Đã bán, A/B thấy Shop nguồn A, Shop bán B và CTV bán; nếu không có CTV thì trường CTV bán trống. CTV tham gia thấy Shop bán B và chính mình, không thấy shop/giá nguồn A như quyền đã chốt.
+- Lý do: lịch sử cần nhận diện đầy đủ shop cung cấp máy, shop chịu trách nhiệm bán và CTV trực tiếp bán mà không nhân bản máy.
+- Hệ quả / khi nào xem lại: sự kiện bán hiện hành giữ `source_shop_id`, `selling_shop_id`, `ctv_user_id`; API lọc các trường theo vai trò. Mô tả cột Người bán ở hai quyết định trước được cụ thể hóa thành Shop bán và CTV bán. Chưa triển khai code.
+
+### 2026-11-27 — Mục Đã bán chỉ dành cho các bên tham gia
+
+- Bối cảnh: sổ quyết định còn mở để ngỏ việc công khai số liệu/máy đã bán, dù mục này là lịch sử nội bộ của các bên giao dịch.
+- Quyết định: chỉ shop nguồn, shop đứng bán và CTV trực tiếp tham gia được xem máy Đã bán theo quyền đã chốt. Khách và shop không tham gia không xem được máy đã bán hoặc thông tin Shop nguồn, Shop bán, CTV bán qua mục nội bộ/API/URL tin cũ.
+- Lý do: đây là dữ liệu giao dịch nội bộ, không là nội dung công khai của chợ.
+- Hệ quả / khi nào xem lại: bỏ câu hỏi công khai Đã bán khỏi quyết định mở; các endpoint đọc phải kiểm tra quyền từ phiên. Chưa triển khai code.
+
+### 2026-11-27 — Đầu mối bảo hành, trả hàng khi reseller bán máy nguồn
+
+- Bối cảnh: đã chốt nguồn A phụ trách bảo hành/trả hàng nhưng chưa rõ đường khách chuyển yêu cầu khi B hoặc CTV của B bán.
+- Quyết định: khách mua từ B liên hệ B trước; nếu CTV trực tiếp bán thì CTV chuyển yêu cầu cho B; B làm việc với A để xử lý, A vẫn phụ trách bảo hành/trả hàng trong thời hạn áp dụng.
+- Lý do: khách có đầu mối ở bên bán, còn shop nguồn chịu trách nhiệm xử lý máy của mình.
+- Hệ quả / khi nào xem lại: ghi đường liên hệ vào quy trình; chưa chốt điều kiện, chứng từ hoặc cách xử lý tranh chấp trong DEC-14. Không tự thêm chức năng yêu cầu bảo hành trên website từ quyết định này.
+
+### 2026-11-27 — B tự chịu thời hạn bảo hành cộng thêm
+
+- Bối cảnh: nguồn A đăng thời hạn bảo hành cho máy; reseller B có thể muốn cam kết dài hơn với khách của mình.
+- Quyết định: B được hứa thời hạn bảo hành dài hơn mức A đã công bố. A chỉ chịu thời hạn nguồn được chụp khi giao dịch bắt đầu; B tự chịu phần thời hạn cộng thêm. Cam kết về sau không sửa thời hạn của giao dịch đã mở.
+- Lý do: B chủ động chính sách bán của mình mà không tăng nghĩa vụ của A ngoài cam kết nguồn.
+- Hệ quả / khi nào xem lại: tách thời hạn nguồn và thời hạn B cam kết trong hiển thị/snapshot giao dịch; điều kiện bảo hành, chứng từ và tranh chấp vẫn thuộc DEC-14. Chưa triển khai code.
+
+### 2026-11-27 — B tự chịu điều kiện đổi/trả rộng hơn A
+
+- Bối cảnh: B có thể hứa đổi/trả với khách dù trường hợp đó không thuộc điều kiện A nhận lại máy.
+- Quyết định: B tự xử lý phần cam kết vượt điều kiện A; A không bắt buộc nhận máy. Chỉ khi A chấp nhận nhận trả và máy đã về A, A mới bấm Mở bán lại trên đơn cũ. Nếu A không nhận, item nguồn tiếp tục Đã bán.
+- Lý do: chính sách B tự mở rộng không thay nghĩa vụ của shop nguồn hoặc trạng thái tồn kho A.
+- Hệ quả / khi nào xem lại: giới hạn nút Mở bán lại vẫn chỉ thuộc A; B nhận trả riêng không tự kích hoạt luồng trả hàng của item A. Điều kiện A chấp nhận và chứng từ/tranh chấp vẫn cần soạn ở DEC-14. Chưa triển khai code.
+
+### 2026-11-27 — Đính chính: máy khách trả được đăng thành hàng mới
+
+- Bối cảnh: luồng Mở bán lại cùng item và chuỗi miễn phí sau trả hàng làm quy trình phức tạp hơn nhu cầu vận hành.
+- Quyết định: bỏ nút Mở bán lại và luồng trả hàng riêng. Item/tin/đơn đã bán giữ nguyên Đã bán; shop nhận máy có quyền bán tiếp tự tạo hàng/tin mới theo quy trình đăng thông thường, không cần nhập lại trên đơn cũ. IMEI có thể trùng giữa item cũ và mới theo quy tắc đã chốt. Nếu item mới được reseller B bán thì giao dịch mới chịu phí chợ 50.000đ theo FEE-02; hàng shop tự sở hữu vẫn miễn phí này. COD giao thất bại vẫn là máy chưa sold và giữ luồng hiện có.
+- Lý do: trạng thái và phí của mỗi lần đăng/bán độc lập, không cần cơ chế mở lại hay miễn phí theo chuỗi.
+- Hệ quả / khi nào xem lại: quyết định này thay các đoạn trước về cùng item/IMEI, nút Mở bán lại, chuỗi trả hàng và miễn phí những lần bán sau. Docs hiện hành được cập nhật; chưa triển khai code.
+
+### 2026-11-27 — Chọn Cloudflare R2 làm nơi lưu media ban đầu
+
+- Bối cảnh: cần chọn nơi lưu ảnh/tệp trước triển khai; chủ dự án muốn kiểm soát chi phí và có thể chuyển dữ liệu ít dùng sang lớp lưu trữ khác khi lớn lên.
+- Quyết định: dùng Cloudflare R2 làm object storage ban đầu cho ảnh/tệp. Tham chiếu media qua ID nội bộ, không gắn URL R2 cố định vào tin/đơn; có thể chuyển lớp lưu trữ/provider về sau theo nhu cầu và chính sách lưu trữ.
+- Lý do: chi phí ban đầu thấp theo phép tính khảo sát, đồng thời giữ đường chuyển đổi về sau.
+- Hệ quả / khi nào xem lại: cần tích hợp R2 khi xây media, bảo vệ khóa truy cập ở cấu hình server, kiểm tra quyền đọc. Nhà cung cấp hạ tầng khác, ngưỡng chuyển lưu trữ lạnh và retention còn mở; chưa triển khai code.
+
+### 2026-11-27 — Giá gói ban đầu và dashboard admin
+
+- Bối cảnh: chủ dự án cân nhắc bỏ hạn mức đơn để giá dễ hiểu, chọn 499.000đ là mức gói chợ phù hợp và muốn admin đổi giá/giới hạn sử dụng khi vận hành.
+- Quyết định: gói chợ ban đầu 499.000đ/shop/tháng, không giới hạn đơn theo gói; quyền CTV nằm trong gói không thu thêm. Website mẫu tùy chọn 200.000đ/tháng. Phí 50.000đ khi reseller bán hàng nguồn giữ riêng theo FEE-02. Admin có dashboard chỉnh giá gói và giới hạn sử dụng đã được cấu hình; không chỉnh nơi lưu hoặc khóa kết nối R2 qua dashboard.
+- Lý do: giá cố định tránh việc shop chạm hạn mức đơn giữa kỳ, admin có thể điều chỉnh chính sách khi biết chi phí/tải thực tế.
+- Hệ quả / khi nào xem lại: phiên giá mới áp dụng lần mua/gia hạn sau, không đổi kỳ đã trả; giới hạn upload mới không làm tệp cũ mất hiệu lực. Cần version/audit và kiểm tra quyền server. Chu kỳ tính ngày và cách thu vẫn ở DEC-09; quyền khi hết hạn đã được chốt ở quyết định kế tiếp; giới hạn ảnh/dung lượng cụ thể vẫn ở DEC-04, retention ở DEC-07. Chưa triển khai code.
+
+### 2026-11-27 — Quyền khi gói chợ hết hạn
+
+- Bối cảnh: cần biết shop có thể làm gì khi không gia hạn, trong khi vẫn còn COD hoặc lượt giữ đang xử lý.
+- Quyết định: hết hạn chưa gia hạn thì yêu cầu gia hạn, ẩn hàng liên quan khỏi giao dịch mới và chặn shop/CTV tạo tin, đơn, QR, request hoặc lượt giữ mới. Các giao dịch đã mở trước hạn vẫn được bên có quyền hoàn tất, báo thất bại hoặc hủy theo quy tắc và thời hạn của giao dịch; hết gói không tự hủy chúng. Gia hạn hợp lệ chỉ gỡ lý do ẩn do hết gói.
+- Lý do: ngừng sử dụng gói mới nhưng vẫn cho các bên kết thúc nghĩa vụ với khách và đối tác đã phát sinh.
+- Hệ quả / khi nào xem lại: cập nhật FEE-01, DEC-09, workflow, UI, quyền API và nghiệm thu. Ngày bắt đầu, biên kết thúc, quy tắc gia hạn và kênh xác nhận tiền đã được chốt ở các quyết định sau; ngoại lệ thanh toán còn mở. Chưa triển khai code.
+
+### 2026-11-27 — Kỳ gói bắt đầu từ ngày thanh toán
+
+- Bối cảnh: cần chọn kỳ gói tính theo ngày shop trả tiền hay theo tháng lịch cố định.
+- Quyết định: kỳ gói tháng của shop bắt đầu từ ngày khoản thanh toán gói được xác nhận cho shop; không lùi về đầu tháng lịch hoặc chờ sang đầu tháng kế tiếp.
+- Lý do: mỗi shop được hưởng kỳ sử dụng bắt đầu từ lúc đã thanh toán, không mất ngày sử dụng vì mua giữa tháng.
+- Hệ quả / khi nào xem lại: cập nhật SPEC, PLAN, FEE-01, DEC-09, luồng và nghiệm thu. Biên kết thúc kỳ, quy tắc gia hạn và kênh xác nhận tiền đã được chốt ở các quyết định sau; ngoại lệ thanh toán còn mở. Chưa triển khai code.
+
+### 2026-11-27 — Kỳ gói dài một tháng
+
+- Bối cảnh: đã chốt bắt đầu từ lúc thanh toán được xác nhận; cần chọn một tháng theo lịch hay cố định 30 ngày.
+- Quyết định: mỗi kỳ hết đúng cùng giờ/ngày tháng kế tiếp từ lúc thanh toán được xác nhận. Nếu tháng kế tiếp không có ngày tương ứng, dùng ngày cuối tháng. Không gom shop vào kỳ ngày 1 đến cuối tháng hoặc tính cố định 30 × 24 giờ.
+- Lý do: thời hạn theo tháng đúng cách shop hiểu về gói hàng tháng.
+- Hệ quả / khi nào xem lại: cập nhật FEE-01, DEC-09, luồng, dữ liệu/API và T-65. Quy tắc gia hạn và kênh xác nhận tiền đã được chốt ở các quyết định sau; ngoại lệ thanh toán còn mở. Chưa triển khai code.
+
+### 2026-11-27 — Không gia hạn gói trước khi hết hạn
+
+- Bối cảnh: cần quyết định cách cộng thời gian nếu shop thanh toán gia hạn trước hạn; chủ dự án xác nhận không có trường hợp này.
+- Quyết định: chỉ cho tạo khoản gia hạn từ đúng thời điểm kỳ hiện tại hết hạn. Khi khoản gia hạn sau hạn được xác nhận, bắt đầu một kỳ tháng mới từ chính lần xác nhận đó; không cộng vào hạn cũ. Ví dụ kỳ đầu xác nhận 31/01 hết 28/02 năm không nhuận; nếu gia hạn được xác nhận 28/02 thì kỳ mới hết 28/03.
+- Lý do: luồng gia hạn chỉ xuất hiện khi shop cần gia hạn, không cần logic cộng dồn kỳ đang còn hiệu lực.
+- Hệ quả / khi nào xem lại: cập nhật FEE-01, DEC-09, SPEC, PLAN, workflow, dữ liệu/API và T-65; bỏ câu hỏi gia hạn sớm. Kênh xác nhận thanh toán đã được chốt ở quyết định sau; ngoại lệ thanh toán còn mở. Chưa triển khai code.
+
+### 2026-11-27 — Thanh toán gói tháng bằng QR và webhook
+
+- Bối cảnh: cần chọn shop trả tiền gói qua QR hay khấu trừ số dư chợ vốn dùng cho phí reseller.
+- Quyết định: shop mua/gia hạn gói qua QR chuyển khoản vào tài khoản chợ. Webhook ngân hàng được xác thực và đối chiếu đúng lượt/shop/số tiền/tài khoản nhận mới xác nhận thanh toán, kích hoạt đúng một kỳ gói. Không trừ tiền gói từ số dư phí reseller; QR gói khác QR nạp số dư và QR cọc COD.
+- Lý do: tách phí thuê bao khỏi phí giao dịch và có bằng chứng tiền vào trước khi mở quyền.
+- Hệ quả / khi nào xem lại: cập nhật FEE-01, DEC-09, workflow, UI, data/API và T-66. Ngoại lệ chuyển sai/thiếu mã và webhook thất lạc đã được chốt ở quyết định sau; nhà cung cấp kết nối còn mở. Chưa triển khai code.
+
+### 2026-11-27 — Đối soát thủ công tiền gói
+
+- Bối cảnh: shop có thể chuyển sai số tiền, thiếu mã hoặc webhook ngân hàng không đến, trong khi tiền thực tế đã vào tài khoản chợ.
+- Quyết định: shop nhắn riêng admin. Admin kiểm tra giao dịch ngân hàng thực nhận, xác định đúng shop và đủ tiền gói, rồi kích hoạt gói thủ công một lần; lưu định danh giao dịch và người thao tác để webhook đến sau hoặc hai admin cùng xử lý không tạo kỳ thứ hai. Lời nhắn/ảnh chuyển khoản của shop không tự xác nhận tiền.
+- Lý do: cho shop khôi phục quyền khi đối chiếu tự động thất bại mà không kích hoạt gói khi chưa có tiền thực nhận.
+- Hệ quả / khi nào xem lại: cập nhật FEE-01, DEC-09, workflow, UI, data/API và T-67. Nhà cung cấp webhook và cách xử lý phần tiền dư còn mở; chưa triển khai code.
+
+### 2026-11-27 — Gói website mẫu hết hạn độc lập
+
+- Bối cảnh: website mẫu là gói tùy chọn riêng, có thể hết hạn trong khi gói chợ của shop vẫn còn.
+- Quyết định: hết gói website thì website bán hàng của đúng shop tạm ngừng hiển thị hàng và không nhận đơn/QR mới. Gói chợ còn hạn vẫn cho shop dùng chợ, nguồn hàng và CTV; website và tin chợ của shop khác không bị ảnh hưởng. Đơn, lượt chờ cọc và COD đã mở trước hạn vẫn xử lý theo quyền và hạn riêng. Gia hạn website chỉ gỡ lý do tạm ngừng vì gói website.
+- Lý do: giới hạn đúng quyền của gói hết hạn mà không gián đoạn giao dịch đã phát sinh hoặc dịch vụ khác đã trả tiền.
+- Hệ quả / khi nào xem lại: cập nhật STORE-01, SPEC, PLAN, workflow, UI, quyền, data/API và T-68. Chưa triển khai code.
+
+### 2026-11-27 — Trải nghiệm chợ 14 ngày và tặng số dư 100.000đ
+
+- Bối cảnh: chủ dự án muốn shop mới có thời gian trải nghiệm và 100.000đ đầu tiên trong chợ; khoản này từng bị hiểu nhầm là giá gói dùng thử.
+- Quyết định: shop được admin duyệt lần đầu có 14 ngày dùng chợ từ lúc duyệt, đồng thời được cộng sẵn 100.000đ vào số dư phí giao dịch chợ. Khoản 100.000đ là số dư tặng một lần/shop, không phải phí thời gian và không tự hết hạn sau 14 ngày. Trong kỳ thử, phí resell 50.000đ và ngưỡng số dư vẫn áp dụng. Hết kỳ thử chưa mua gói tháng thì khóa việc mới, giữ xử lý giao dịch cũ và số dư còn lại. Website mẫu là gói riêng. Admin dashboard kiểm soát mức/bật tắt khoản tặng cho shop duyệt sau đó và xem lịch sử, không sửa khoản đã cấp.
+- Lý do: shop được trải nghiệm quy trình trước khi trả phí tháng và có số dư ban đầu để thử giao dịch resell, trong khi mỗi khoản tặng vẫn truy vết được.
+- Hệ quả / khi nào xem lại: cập nhật SPEC, PLAN, FEE-01, workflow, UI, quyền, data/API và T-69; chưa triển khai code.
+
+### 2026-11-27 — Admin được tạm khóa shop đã duyệt
+
+- Bối cảnh: cần quyền xử lý shop approved có vấn đề mà vẫn giữ nghĩa vụ với khách và shop khác đã giao dịch.
+- Quyết định: admin được tạm khóa và mở khóa shop approved. Lúc khóa, shop/CTV không tạo việc mới, hàng nguồn và bản treo liên quan ngừng nhận đơn/request mới. Đơn, QR, request và hold đã mở trước đó vẫn cho các bên có quyền xử lý theo hạn và trạng thái cũ; không tự hủy/xóa lịch sử. Mở khóa chỉ gỡ lý do ẩn do khóa, các điều kiện bán khác vẫn áp dụng.
+- Lý do: ngăn phát sinh rủi ro mới nhưng không làm đứt giao dịch đã cam kết.
+- Hệ quả / khi nào xem lại: cập nhật SPEC, PLAN, SHOP/DEC-10, workflow, UI, quyền, data/API và T-70. Cách cộng bù thời gian đã được chốt ở quyết định sau; quyền can thiệp admin khác còn mở. Chưa triển khai code.
+
+### 2026-11-27 — Cộng bù thời gian khi admin khóa shop
+
+- Bối cảnh: tạm khóa shop làm shop không dùng được quyền mới dù kỳ trải nghiệm hoặc gói đã trả còn thời gian.
+- Quyết định: kỳ trải nghiệm chợ 14 ngày và gói chợ/website mẫu đã trả, nếu còn hạn lúc admin khóa, đều dừng thời gian từ lúc khóa đến lúc mở. Khi admin mở khóa, cộng đúng thời lượng bị khóa vào hạn từng kỳ/gói; nhiều lần khóa chỉ cộng từng khoảng một lần, retry không cộng đôi. Kỳ/gói đã hết trước lúc khóa không được bù. Không cấp lại khoản tặng số dư.
+- Lý do: shop được sử dụng đủ thời gian đã được cấp hoặc đã thanh toán, trong khi giao dịch cũ vẫn xử lý theo quyết định tạm khóa.
+- Hệ quả / khi nào xem lại: cập nhật SPEC, PLAN, yêu cầu, workflow, UI, data/API, DEC-10 và T-71. Các quyền can thiệp admin khác còn mở; chưa triển khai code.
+
+### 2026-11-27 — Admin ẩn riêng tin nguồn vi phạm
+
+- Bối cảnh: vi phạm có thể chỉ nằm ở một tin, không cần tạm khóa cả shop; máy đó có thể đã được nhiều reseller treo trên website.
+- Quyết định: admin được ẩn riêng tin nguồn vi phạm; tin và tất cả bản treo của cùng máy ngừng hiển thị/nhận giao dịch mới. Shop nguồn và mọi reseller đang treo máy nhận thông báo. Đơn, QR, request và hold đã mở trước khi ẩn vẫn tiếp tục theo quyền/hạn cũ. Shop nguồn không tự gỡ lý do ẩn của admin; tin khác của shop không bị ảnh hưởng. Quyền này thuộc admin, không cấp cho shop nguồn quyền ẩn riêng sản phẩm trên từng website reseller.
+- Lý do: kiểm duyệt đúng phạm vi tin vi phạm và thông báo cho các bên đang sử dụng nguồn hàng đó.
+- Hệ quả / khi nào xem lại: cập nhật SPEC, PLAN, yêu cầu, workflow, UI, quyền, data/API, DEC-10 và T-72. Quy trình shop gửi xét duyệt lại sau sửa đã được chốt ở quyết định sau; chưa triển khai code.
+
+### 2026-11-27 — Shop gửi xét duyệt lại tin vi phạm
+
+- Bối cảnh: cần cơ chế trên website để shop nguồn khắc phục tin bị admin ẩn và đề nghị cho hiện lại, thay vì chỉ nhắn riêng admin.
+- Quyết định: shop nguồn sửa tin theo quyền sửa hiện có rồi bấm Gửi xét duyệt lại. Lượt gửi gắn đúng phiên bản tin; admin xem và chấp nhận hoặc từ chối. Tin giữ cờ ẩn khi chờ hoặc bị từ chối; chỉ admin chấp nhận mới gỡ cờ vi phạm. Shop sửa tiếp thì lượt gửi cũ mất hiệu lực, phải gửi bản mới. Sau chấp nhận, tin/bản treo vẫn phải đủ điều kiện gói, tồn kho, hạn tin, giá và hợp tác; nếu sửa thông tin quan trọng, reseller treo lại theo quy tắc đã chốt.
+- Lý do: shop có đường khắc phục rõ ràng và admin duyệt đúng nội dung đã gửi, tránh tự hiện tin chưa đạt.
+- Hệ quả / khi nào xem lại: cập nhật SPEC, PLAN, yêu cầu, workflow, UI, quyền, data/API, DEC-10 và T-73. Chưa triển khai code.
+
+### 2026-11-27 — Admin không sửa tin hộ shop
+
+- Bối cảnh: cần phân định quyền khi tin vi phạm bị ẩn và shop gửi bản sửa xét duyệt lại.
+- Quyết định: admin chỉ ẩn tin nguồn vi phạm và chấp nhận hoặc từ chối đúng bản do shop nguồn tự sửa, tự gửi. Admin không sửa nội dung tin hoặc máy hộ shop qua giao diện hay API; quyền sửa nội dung vẫn thuộc shop nguồn theo các điều kiện sửa đã chốt.
+- Lý do: shop nguồn chịu trách nhiệm nội dung tin, admin chỉ kiểm duyệt bản được gửi.
+- Hệ quả / khi nào xem lại: cập nhật SPEC, PLAN, yêu cầu, workflow, UI, quyền, API, DEC-10 và T-73. Chưa triển khai code.

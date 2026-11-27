@@ -2,6 +2,45 @@
 
 ## Đã xong
 
+- [x] Chọn Cloudflare R2 làm object storage ban đầu cho ảnh/tệp; giữ tham chiếu media nội bộ để có thể chuyển lớp lưu trữ hoặc provider khi quy mô cần (2026-11-27).
+- [x] Chốt giá ban đầu gói chợ 499.000đ/shop/tháng không giới hạn số đơn, CTV miễn phí trong gói, website mẫu 200.000đ/tháng; admin chỉnh giá gói và giới hạn sử dụng trên dashboard, kỳ đã trả giữ giá cũ (2026-11-27).
+- [x] Chốt hết hạn gói chưa gia hạn thì shop/CTV không tạo việc mới, thấy yêu cầu gia hạn; chỉ gia hạn và xử lý đơn/lượt giữ đã mở trước hạn (2026-11-27).
+- [x] Chốt mỗi kỳ gói bắt đầu lúc xác nhận thanh toán, kết thúc cùng giờ/ngày tháng sau; tháng thiếu ngày lấy ngày cuối tháng. Chỉ gia hạn sau khi hết hạn, kỳ mới tính từ lần xác nhận mới (2026-11-27).
+- [x] Chốt thanh toán gói qua QR vào tài khoản chợ, webhook đã xác thực/đối chiếu kích hoạt; tách tiền gói khỏi số dư phí reseller (2026-11-27).
+- [x] Chốt chuyển sai/thiếu mã hoặc webhook không đến: shop nhắn admin, admin xác minh tiền thực nhận và kích hoạt thủ công một lần; webhook đến sau không kích hoạt trùng (2026-11-27).
+- [x] Chốt website mẫu hết hạn thì ngừng nhận đơn mới trên website đó, giữ quyền xử lý giao dịch cũ; gói chợ/CTV của shop còn hạn tiếp tục hoạt động (2026-11-27).
+- [x] Chốt shop được duyệt lần đầu trải nghiệm chợ 14 ngày và nhận sẵn 100.000đ số dư phí chợ một lần; admin chỉnh chính sách khoản tặng trên dashboard, hết kỳ thử chuyển sang quy tắc gói tháng (2026-11-27).
+- [x] Chốt admin tạm khóa shop approved: hàng liên quan ngừng nhận giao dịch mới, shop/CTV không tạo việc mới; đơn/request/hold đã mở tiếp tục xử lý, chỉ admin mở khóa (2026-11-27).
+- [x] Chốt kỳ trải nghiệm 14 ngày và gói chợ/website mẫu đã trả còn hạn được dừng thời gian khi admin khóa shop, cộng bù khi mở khóa; kỳ/gói đã hết hạn trước khóa không được bù, không cộng lại số dư tặng (2026-11-27).
+- [x] Chốt admin được ẩn riêng tin nguồn vi phạm, báo shop nguồn và mọi reseller đang treo máy; tin/bản treo ngừng giao dịch mới, giao dịch đã mở tiếp tục theo hạn (2026-11-27).
+- [x] Chốt shop nguồn sửa tin admin ẩn rồi bấm Gửi xét duyệt lại; admin chấp nhận/từ chối, chỉ chấp nhận mới gỡ lý do ẩn vi phạm (2026-11-27).
+- [x] Chốt admin không sửa nội dung tin hộ shop; chỉ ẩn tin vi phạm và xét duyệt bản do shop nguồn tự sửa/gửi (2026-11-27).
+
+- [x] Chốt lời mời CTV trùng Gmail, lời mời mới khi quay lại, lịch sử chỉ đọc sau rời shop, sàn giá CTV hàng resell và hạn 24 giờ chờ chủ shop duyệt (2026-11-21).
+- [x] Chốt hàng resell chờ B treo lại tạm ẩn với CTV; giá đổi lặp lại khi CTV chờ xác nhận chỉ lấy giá mới nhất và tính lại hạn 12 giờ, không hồi sinh request expired (2026-11-21).
+- [x] Chốt giá bán B là mốc tự điều chỉnh giá CTV cho hàng sở hữu và resell; hàng resell áp dụng sàn giá nguồn A và chỉ tính/mở lại sau khi B treo lại (2026-11-21).
+- [x] Chốt tin hết hạn không nhận giao dịch mới, hold/đơn mở vẫn xử lý; quá cửa sổ gia hạn 3 ngày thì hoãn dọn bản ghi đến khi giao dịch kết thúc, không gia hạn muộn (2026-11-21).
+- [x] Chốt 90 × 24 giờ từ lúc đăng và 3 × 24 giờ từ lúc hết hạn theo giờ DB; đúng mốc hết quyền bán mới/gia hạn tương ứng (2026-11-21).
+- [x] Chốt tin quá cửa sổ/hết giao dịch mở được archive, không hard-delete tự động; máy chưa sold được tạo tin mới cùng item sau khi cập nhật tình trạng/ảnh, tin cũ giữ lịch sử (2026-11-21).
+- [x] Chốt shop nguồn được sửa tình trạng/phụ kiện/bảo hành/ảnh khi chưa có hold/đơn mở; giao dịch mở khóa sửa các trường này và giữ snapshot. Thông tin quan trọng đổi làm bản treo B tạm ẩn, CTV không thấy máy (2026-11-21).
+- [x] Chốt IMEI iPhone bắt buộc nhưng không unique theo item hoặc tin; các máy/tin khác nhau có thể trùng IMEI (2026-11-21).
+- [x] Chốt chỉ admin quản lý danh mục/nhóm/mẫu; shop thiếu mẫu tự nhắn admin ngoài luồng; mẫu ngừng dùng chỉ ẩn khỏi lựa chọn hàng mới, hàng cũ vẫn bán (2026-11-24).
+- [x] Chốt serial tùy chọn; iPhone chưa đọc/nhập được IMEI thì chưa đăng bán. A sửa IMEI sai khi chưa có hold/đơn mở; khóa trong giao dịch và giữ lịch sử khi máy đã bán (2026-11-21).
+- [x] Chốt các trường nhập tin iPhone: pin nhập % nguyên hoặc Không đọc được, dung lượng GB nguyên, mô tả tình trạng/lỗi/phụ kiện, iCloud, bảo hành ngày, giá VND, khu vực và ít nhất một ảnh thật; validation khi xuất bản (2026-11-27).
+- [x] Đính chính luồng khách trả máy sau sold: giữ item/đơn cũ Đã bán; bên nhận máy tự tạo hàng/tin mới theo quy trình thường, không có nút Mở bán lại. Resell hàng mới bán thành công chịu phí 50.000đ theo quy tắc thường (2026-11-27).
+- [x] Chốt nút Sản phẩm đã bán thủ công có popup xác nhận; chỉ ghi sold sau khi A xác nhận, không thêm luồng hoàn tác riêng (2026-11-21).
+- [x] Chốt mỗi shop approved một nhận xét cho mỗi lần nộp hồ sơ; được sửa/rút trước quyết định admin; chỉ tác giả xem của mình, admin xem tất cả; shop nộp không xem nhận xét (2026-11-27).
+- [x] Chốt hồ sơ pending hết hạn đúng 30 × 24 giờ; shop quá hạn hoặc bị từ chối nộp lại cùng tài khoản/shop, tạo lần nộp và hạn mới, giữ lịch sử/nhận xét cũ nhưng không chuyển sang lần mới (2026-11-27).
+- [x] Chốt shop approved xem đủ năm trường hồ sơ pending còn hạn trên dashboard; khách, CTV và shop chưa approved không xem hồ sơ shop khác (2026-11-27).
+- [x] Chốt máy A do CTV thuộc B bán vẫn là cùng máy trong Đã bán của A, B và CTV tham gia; A/B thấy Shop nguồn A, Shop bán B, CTV bán; CTV chỉ thấy B và chính mình, không thấy A (2026-11-27).
+- [x] Chốt mục Đã bán chỉ hiển thị nội bộ cho nguồn, shop bán và CTV tham gia theo quyền; khách/shop không tham gia không xem được (2026-11-27).
+- [x] Chốt khách mua máy do B bán liên hệ B về bảo hành/trả hàng; CTV chuyển yêu cầu cho B; B phối hợp với nguồn A, A phụ trách xử lý trong thời hạn áp dụng (2026-11-27).
+- [x] Chốt B được hứa bảo hành dài hơn thời hạn A công bố cho máy; B tự chịu phần cộng thêm, A chỉ chịu thời hạn nguồn được chụp lúc giao dịch bắt đầu (2026-11-27).
+- [x] Chốt B tự chịu điều kiện đổi/trả rộng hơn A; bên nhận máy có quyền bán tiếp tự tạo hàng/tin mới, item nguồn cũ vẫn Đã bán (2026-11-27).
+- [ ] Chốt chi tiết kỹ thuật xác nhận máy trả đã về; shop tự thu mua máy từ khách là giao dịch ngoài website của giai đoạn sau.
+- [x] Giữ phí COD resell như cũ: thất bại hoàn 50.000đ đã trừ, đơn COD mới thu lại theo mốc bình thường; COD thất bại B được báo và chọn treo lại sau khi A đưa máy lên chợ. Máy trả sau sold nếu đăng thành hàng mới thì giao dịch resell mới chịu phí thông thường (2026-11-27).
+- [ ] Giai đoạn sau: dashboard quản lý máy shop tự thu mua từ khách ngoài website; chưa đưa giao dịch thu mua vào luồng website hiện tại.
+
 - [x] Kiểm tra trạng thái repo hiện tại.
 - [x] Tạo điểm vào và bản đồ ngữ cảnh cho Codex/Claude Code.
 - [x] Đặt quy tắc bảo vệ secrets và cập nhật tài liệu.
@@ -38,7 +77,7 @@
 - [ ] Rà kiến trúc với chủ dự án trước khi thêm các module nghiệp vụ; ghi quyết định về hạ tầng triển khai khi có thông tin.
 - [ ] Chốt các quyết định sản phẩm còn mở trong `SPEC.md` với người dùng.
 - [ ] Soạn quy định tối thiểu cho shop, tin đăng, giá, liên lạc và giữ hàng.
-- [ ] Chốt mẫu đánh giá từ shop cũ và cách admin xử lý ý kiến trái chiều.
+- [x] Chốt admin xem toàn bộ nhận xét và tự đánh giá khi duyệt shop; không phân loại tích cực/tiêu cực, tính phiếu hay thêm luồng xử lý mâu thuẫn trong website (2026-11-27).
 - [ ] Chốt loại tệp chat, thông báo và lưu trữ hội thoại; xử lý tin hết hạn có giao dịch mở; thời điểm khóa giá cho đơn online giai đoạn sau.
 - [ ] Đánh giá pháp lý và vận hành dòng tiền giữ/giải ngân, hóa đơn cho giai đoạn website.
 - [ ] Định nghĩa chi tiết trạng thái giữ hàng, xác nhận thanh toán, quyền đăng lại và xử lý đơn khi ngừng hợp tác.
@@ -69,7 +108,7 @@ Chỉ thêm MCP, skill, agent chuyên biệt hoặc script tự động khi có 
 - [x] Thống nhất treo/treo lại là reseller hiển thị sản phẩm nguồn trên website; kỳ 90 ngày của tin chợ dùng “Gia hạn tin”.
 - [ ] Review schema categories/nhóm/mẫu và thuộc tính theo loại hàng trước migration catalog.
 
-- [x] Chốt máy secondhand đã bán vào mục Đã bán, sold là trạng thái kết thúc, không mở bán/gia hạn/treo lại.
+- [x] Chốt máy secondhand đã bán vào mục Đã bán; item/tin cũ không mở bán/gia hạn/treo lại. Máy khách trả muốn bán tiếp được tạo thành hàng/tin mới theo luồng đăng thông thường, không dùng nút riêng.
 - [ ] Khi xây catalog, triển khai kho lịch sử Đã bán và bảo vệ bất biến sold ở service/DB/worker; kiểm thử cạnh tranh.
 
 - [x] Chốt cấm shop nguồn sửa giá máy khi lượt giữ đã xác nhận còn hiệu lực; hủy/hết hạn và chưa bán mới được sửa lại.
@@ -159,7 +198,7 @@ Các mục lịch sử nhắc bộ 14 docs phản ánh thời điểm trước h
 - [x] Chốt chủ shop ngừng hợp tác CTV: request chưa duyệt bị hủy cùng lúc kết thúc membership; giao dịch đã duyệt/request nguồn/hold/đơn mở phải xử lý xong trước, nếu chưa thì chặn toàn bộ thao tác. Sau kết thúc CTV mất quyền shop cũ, giữ lịch sử và được tham gia shop khác.
 - [x] Chốt request CTV chỉ gồm máy và số tiền đề xuất, không yêu cầu tên/số điện thoại/địa chỉ khách; shop reseller tự trao đổi với CTV để xử lý thông tin khách khi cần. Không tự tạo đơn khách web từ request CTV.
 - [x] Chốt chủ shop mời CTV bằng Gmail, lời mời hiệu lực 7 ngày từ lúc gửi; người nhận đăng nhập/đăng ký đúng Gmail và bấm Chấp nhận trước hạn mới có quyền, chỉ một shop active.
-- [x] Chốt chủ shop được hủy lời mời CTV chưa chấp nhận; link/token cũ hết hiệu lực ngay, không khóa Gmail, không tước membership đã có và không tự gửi lời mời mới. Nhiều lời mời pending cùng Gmail và quyền xem lịch sử sau rời shop còn cần chốt.
+- [x] Chốt chủ shop được hủy lời mời CTV chưa chấp nhận; link/token cũ hết hiệu lực ngay, không khóa Gmail, không tước membership đã có và không tự gửi lời mời mới. Hai điểm này đã chốt ngày 2026-11-21.
 - [x] Chốt nhiều request cùng máy: A chọn bất kỳ, xác nhận một request thì tự từ chối request còn lại trong cùng transaction; hold hủy/hết hạn không mở lại request cũ, shop gửi request mới nếu máy còn bán được.
 - [x] Chốt chủ shop B được rút request xin giữ còn chờ A; sau khi A xác nhận hold thì quyền rút request không còn. Chủ shop B được hủy hold còn hạn trước khi A chốt bán; A được báo, không thu phí và máy chỉ mở lại nếu đủ điều kiện.
 - [x] Chốt A được từ chối riêng request lấy máy còn chờ, lý do tùy chọn; báo shop gửi, không ảnh hưởng request khác hoặc giữ máy, không thu phí.
